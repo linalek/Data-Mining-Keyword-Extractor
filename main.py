@@ -281,3 +281,10 @@ def calculate_and_store_glue(all_n_grams: dict[str,n_gram], glue_function: str) 
               ngram1.add_glue_n_grams_plus_1(ngram, g)
             if ngram2 is not None:
               ngram2.add_glue_n_grams_plus_1(ngram, g)    
+
+
+############################################################
+# -------------------------Tests ---------------------------
+############################################################
+
+# A test script is available in lina's branch on lina.py to test the functions.
