@@ -90,10 +90,10 @@ def create_n_grams(tokens:list[str], stop_words:list[str]) -> dict[str,n_gram]:
   l_list:int = len(tokens) # length of the list of tokens
 
   # cycle through all the tokens 
-  for index in range(l_list):
+  for index in range(l_list+1):
     # foreach token we can have until 8 n-grams
     for size in range(2,9):
-      if index+size > l_list-1:
+      if index+size > l_list:
         break
       
       # Check if the first or last tokens in the n-gram are a stop_word because this is forbiden

@@ -1,25 +1,26 @@
-from src.text_processing import text_processing,read_text_files
+from src.text_processing import text_processing,read_text_files, add_spaces, tokenize_text
 from src.ngram import *
 from src.stopwords import get_stop_words, get_nltk_stopwords_in_corpus
 from src.utils import calculate_and_store_glue
 
 def main():    
     # Pré-processamento
-    #tokens:list[str] = text_processing("data/testCorpus")
-    # d = read_text_files("data/testCorpus")
-    # for text in d.values():
-    #     text = add_spaces(text)
+    tokens:list[str] = text_processing("../test")
+    print(tokens)
+
     # Stopwords
     #######################################################################################
     # Still using the python library due to the need of imporvement in our algorithm
     #######################################################################################
-    stop_words:list[str] = get_nltk_stopwords_in_corpus(read_text_files("data/corpus2mw"))
+    stop_words:list[str] = get_nltk_stopwords_in_corpus(read_text_files("../test"))
+    print(stop_words)
 
     # Construção de n-gramas
     ngram_dict:dict[str:n_gram] = create_n_grams(tokens,stop_words)
 
     # Glues updated in each n-gram
-    ngram_dict = calculate_and_store_glue(ngram_dict, "dice")
+    #ngram_dict2 = calculate_and_store_glue(ngram_dict, "dice")
+
 
     s=0
     # 

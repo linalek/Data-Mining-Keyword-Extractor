@@ -35,11 +35,11 @@ def add_spaces(text : str) -> str:
 
     # Special case for the punctuation "."
     # Decimal numbers
-    spaced_text = re.sub(r'(?<=\d).(?=\d)', '.', text)
+    spaced_text = re.sub(r'(?<=\d)\.(?=\d)', '.', text)
     # Acronyms
-    spaced_text = re.sub(r'(?<=\b[A-Za-z]).(?=[A-Za-z]\b)', '.', spaced_text) 
+    spaced_text = re.sub(r'(?<=\b[A-Za-z])\.(?=[A-Za-z]\b)', '.', spaced_text) 
     # All other cases, we add spaces around "."
-    spaced_text = re.sub(r'. ', ' . ', spaced_text)
+    spaced_text = re.sub(r'\. ', ' . ', spaced_text)
     ## We do not make the difference with the last dot of an acronym and the dot to end the sentence
 
     punctuations = r"([;:!?,<>&\)\(\]\[])"
