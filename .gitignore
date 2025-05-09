@@ -4,3 +4,4 @@ lina.py
 .vscode
 venv
 data
+__pycache__

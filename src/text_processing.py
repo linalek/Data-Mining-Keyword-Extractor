@@ -35,11 +35,11 @@ def add_spaces(text : str) -> str:
 
     # Special case for the punctuation "."
     # Decimal numbers
-    spaced_text = re.sub(r'(?<=\d)\.(?=\d)', '.', text)
+    spaced_text = re.sub(r'(?<=\d).(?=\d)', '.', text)
     # Acronyms
-    spaced_text = re.sub(r'(?<=\b[A-Za-z])\.(?=[A-Za-z]\b)', '.', spaced_text) 
+    spaced_text = re.sub(r'(?<=\b[A-Za-z]).(?=[A-Za-z]\b)', '.', spaced_text) 
     # All other cases, we add spaces around "."
-    spaced_text = re.sub(r'\. ', ' . ', spaced_text)
+    spaced_text = re.sub(r'. ', ' . ', spaced_text)
     ## We do not make the difference with the last dot of an acronym and the dot to end the sentence
 
     punctuations = r"([;:!?,<>&\)\(\]\[])"
@@ -49,7 +49,7 @@ def add_spaces(text : str) -> str:
     return spaced_text.strip()
 
 # Function to tokenize the text
-def tokenize_text(text: str) -> list:
+def tokenize_text(text: str) -> list[str]:
     """
     Generate a list of tokens from the text.
     Parameters: text (str): the text to tokenize.
@@ -57,3 +57,12 @@ def tokenize_text(text: str) -> list:
     """
     tokens = text.split()  # Divide the text into tokens based on whitespace hence the addition of spaces around punctuation marks
     return tokens
+
+def text_processing(corpus_path:str) -> list[str]:
+    text_files:dict = read_text_files(corpus_path)
+    tokenized_text:list[str] = []
+    for text in text_files.values():
+        spaced_text:str = add_spaces(text)
+        tokenized_text.extend(tokenize_text(spaced_text))
+    return tokenized_text
+

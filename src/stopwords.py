@@ -2,6 +2,9 @@
 # Stop Words Our Algorithm
 ###################################################################
 
+#silabas = #vowels - #2*vowels in a row
+# se a palavra tiver um acento em alguma vowel não subtrai
+
 # Count syllables
 def count_syllables(word: str) -> int:
   """
@@ -19,7 +22,9 @@ def count_syllables(word: str) -> int:
   int: The total number of syllables in the word.
   """
 
-  vowels:str = "aeiouáéíóúãõâêô" # List of vowels
+  vowels:str = "aeiou" # List of vowels
+  accent_vowels:str = "áéíóúãõâêô" # List of accent vowels
+  
   word = word.lower()
   syllables:int = 0
   in_vowel_sequence:bool = False # Check if we are already in a sequence of vowels

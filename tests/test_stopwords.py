@@ -1,8 +1,6 @@
 from src.text_processing import read_text_files
 from src.stopwords import get_stop_words,get_nltk_stopwords_in_corpus
 
-
-
 ######################################### Test1 ########################################
 corpus:dict[str:str] = read_text_files("./data/corpus2mw")
 stop_words:list[str] = get_stop_words(corpus)

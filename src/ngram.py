@@ -1,5 +1,5 @@
-from src.cohesion_metrics import scp_glue,dice_glue,mi_glue
-
+from math import log2
+from src.cohesion_metrics import scp_glue, dice_glue, mi_glue
 ##################################################################
 # N-gram class
 ###################################################################
@@ -9,6 +9,7 @@ class n_gram:
   tokens:list[str] = []
   glue_n_grams_minus_1:dict = {}
   glue_n_grams_plus_1:dict = {}
+  relevant_expression:bool = False
 
   #Constructor
   def __init__(self,size:int, frequency:int, tokens:list[str]) -> None:
@@ -111,3 +112,5 @@ def create_n_grams(tokens:list[str], stop_words:list[str]) -> dict[str,n_gram]:
         n_grams[key] = n_gram(size,1,tokens[index:index+size])
 
   return n_grams
+
+ 
