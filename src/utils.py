@@ -32,11 +32,11 @@ def calculate_and_store_glue(all_n_grams: dict[str, n_gram], glue_function: str,
     # Compute the glue for each n-gram
     for ngram in ngrams:
         w = all_n_grams[ngram]
-        print(ngram)
+        #print(ngram)
         g = w.glue(glue_function, all_n_grams, total_count)
 
         n = w.get_size()
-        print(n)
+        #print(n)
         if n > 2:  # It must be more than a bigram to compute the glue
             to_update1 = w.get_tokens()[:n - 1]
             to_update2 = w.get_tokens()[1:n]
@@ -58,20 +58,20 @@ def calculate_and_store_glue(all_n_grams: dict[str, n_gram], glue_function: str,
             if ngram1 is not None:
                 # Get the key of the ngram1
                 ngram_key1 = " ".join(to_update1)
-                print(ngram_key1)
+                #print(ngram_key1)
                 g1 = all_n_grams[ngram_key1].glue(glue_function, all_n_grams, total_count)
                 w.add_glue_n_grams_minus_1(ngram_key1, g1)
-                print("glue ngram1")
+                #print("glue ngram1")
                 if w.get_size() >= 3 and all_n_grams[ngram].get_size() <= 7:
                     ngram1.add_glue_n_grams_plus_1(ngram, g)
 
             if ngram2 is not None:
                 # Get the key of the ngram2
                 ngram_key2 = " ".join(to_update2)
-                print(ngram_key2)
+                #print(ngram_key2)
                 g2 = all_n_grams[ngram_key2].glue(glue_function, all_n_grams, total_count)
                 w.add_glue_n_grams_minus_1(ngram_key2, g2)
-                print("glue ngram2")
+                #print("glue ngram2")
                 if w.get_size() >= 3 and all_n_grams[ngram].get_size() <= 7:
                     ngram2.add_glue_n_grams_plus_1(ngram, g)
 
@@ -79,7 +79,7 @@ def calculate_and_store_glue(all_n_grams: dict[str, n_gram], glue_function: str,
                 # We don't need to update the glue of (n+1)grams because we don't use them.
                 if ngram1 is not None:
                     ngram1.add_glue_n_grams_plus_1(ngram, g)
-                    print("glue ngram1")
+                    #print("glue ngram1")
                 if ngram2 is not None:
                     ngram2.add_glue_n_grams_plus_1(ngram, g)
 
