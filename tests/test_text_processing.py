@@ -1,6 +1,8 @@
 import os
 from src.text_processing import read_text_files, add_spaces, tokenize_text, text_processing  
 
+################################### Test Cases ###################################
+
 # Prepare a test environment with temporary files
 test_dir = "test_corpus"
 os.makedirs(test_dir, exist_ok=True)
