@@ -41,6 +41,8 @@ def add_spaces(text : str) -> str:
     # All other cases, we add spaces around "."
     spaced_text = re.sub(r'\. ', ' . ', spaced_text)
     ## We do not make the difference with the last dot of an acronym and the dot to end the sentence
+    # Add spaces around "." in all other cases, including end of line or document.
+    spaced_text = re.sub(r'(?<!\d)(?<!\b[A-Za-z])\.(?!\d)(?![A-Za-z]\b)', ' . ', spaced_text)
 
     punctuations = r"([;:!?,<>&\)\(\]\[])"
     spaced_text = re.sub(punctuations, r" \1 ", spaced_text)
@@ -58,11 +60,27 @@ def tokenize_text(text: str) -> list[str]:
     tokens = text.split()  # Divide the text into tokens based on whitespace hence the addition of spaces around punctuation marks
     return tokens
 
-def text_processing(corpus_path:str) -> list[str]:
-    text_files:dict = read_text_files(corpus_path)
-    tokenized_text:list[str] = []
-    for text in text_files.values():
-        spaced_text:str = add_spaces(text)
-        tokenized_text.extend(tokenize_text(spaced_text))
-    return tokenized_text
+# Function to process all text files in a given corpus path in reading order
+def text_processing(corpus_path: str) -> list[str]:
+    """
+    Process all text files in a given corpus path in reading order.
+    Parameters:
+        corpus_path (str): Path to the folder containing text files.
+    Returns:
+        list[str]: A list of tokens from all files, in reading order.
+    """
+    # Read the text files
+    text_files: dict = read_text_files(corpus_path)
 
+    # Sort the files by key (file name)
+    sorted_text_files = dict(sorted(text_files.items()))
+
+    # Initialize a list for the tokens
+    tokenized_text: list[str] = []
+
+    # Process each file in sorted order
+    for text in sorted_text_files.values():
+        spaced_text: str = add_spaces(text)  # Add spaces around punctuation marks
+        tokenized_text.extend(tokenize_text(spaced_text))  # Tokenize and add to the list
+
+    return tokenized_text
