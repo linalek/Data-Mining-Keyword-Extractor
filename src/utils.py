@@ -1,3 +1,4 @@
+import random
 from src.ngram import n_gram  # Classe n_gram
 
 #############################################################
@@ -17,7 +18,9 @@ def get_element(tokens: list[str], all_n_grams: dict[str,n_gram])-> n_gram:
             return ngram
     return None
 
-
+##################################################################
+# Why do we need to store the dict of every single glue value instead of just saving the max of that?
+#############################################################
 def calculate_and_store_glue(all_n_grams: dict[str, n_gram], glue_function: str, stop_words: list[str]) -> dict:
     """
     Compute the glue of n-grams and store them in a dictionary.
@@ -32,8 +35,9 @@ def calculate_and_store_glue(all_n_grams: dict[str, n_gram], glue_function: str,
     # Compute the glue for each n-gram
     for ngram in ngrams:
         w = all_n_grams[ngram]
-        #print(ngram)
-        g = w.glue(glue_function, all_n_grams, total_count)
+
+        g = w.calculate_glue(glue_function, all_n_grams, total_count)
+        w.set_glue(g)
 
         n = w.get_size()
         #print(n)
@@ -59,7 +63,7 @@ def calculate_and_store_glue(all_n_grams: dict[str, n_gram], glue_function: str,
                 # Get the key of the ngram1
                 ngram_key1 = " ".join(to_update1)
                 #print(ngram_key1)
-                g1 = all_n_grams[ngram_key1].glue(glue_function, all_n_grams, total_count)
+                g1 = all_n_grams[ngram_key1].calculate_glue(glue_function, all_n_grams, total_count)
                 w.add_glue_n_grams_minus_1(ngram_key1, g1)
                 #print("glue ngram1")
                 if w.get_size() >= 3 and all_n_grams[ngram].get_size() <= 7:
@@ -69,12 +73,12 @@ def calculate_and_store_glue(all_n_grams: dict[str, n_gram], glue_function: str,
                 # Get the key of the ngram2
                 ngram_key2 = " ".join(to_update2)
                 #print(ngram_key2)
-                g2 = all_n_grams[ngram_key2].glue(glue_function, all_n_grams, total_count)
+                g2 = all_n_grams[ngram_key2].calculate_glue(glue_function, all_n_grams, total_count)
                 w.add_glue_n_grams_minus_1(ngram_key2, g2)
                 #print("glue ngram2")
                 if w.get_size() >= 3 and all_n_grams[ngram].get_size() <= 7:
                     ngram2.add_glue_n_grams_plus_1(ngram, g)
-
+            
             if w.get_size() == 8:
                 # We don't need to update the glue of (n+1)grams because we don't use them.
                 if ngram1 is not None:
@@ -82,5 +86,28 @@ def calculate_and_store_glue(all_n_grams: dict[str, n_gram], glue_function: str,
                     #print("glue ngram1")
                 if ngram2 is not None:
                     ngram2.add_glue_n_grams_plus_1(ngram, g)
+    
+    for ngram in ngrams:
+        ng = all_n_grams[ngram]
+        #Calculate the max for the minus1
+        ng.set_max_glue_n_grams_minus_1(max(ng.get_glue_n_grams_minus_1().values())) if ng.get_glue_n_grams_minus_1() else ng.set_max_glue_n_grams_minus_1(0.0)
+        #Calculate the max for the plus1
+        ng.set_max_glue_n_grams_plus_1(max(ng.get_glue_n_grams_plus_1().values())) if ng.get_glue_n_grams_plus_1() else ng.set_max_glue_n_grams_plus_1(0.0)
 
     return all_n_grams
+
+###################################### ASK ASK ASK THE PROFESSOR #####################################
+# we need to create 8-grams or just 7-grams? if its 7-grams we need to change the values in create_n_grams funciton and calculate_and_store_glue
+############################# ############################### ########################## ##############
+
+
+#############################################################################
+# Extract all the relevant expressions from the all_n_grams dictionary
+#############################################################################
+def extract_random_relevant_expressions(all_n_grams: dict[str, 'n_gram'], size: int = 200) -> list[str]:
+    # Extract all relevant expressions
+    relevant_expressions = [key for key, ng in all_n_grams.items() if ng.is_relevant_expression()]
+    
+    # Returns a random sample of until size 200
+    return random.sample(relevant_expressions, min(size, len(relevant_expressions)))
+

@@ -1,45 +1,50 @@
+import os
+import matplotlib.pyplot as plt
+
 ##################################################################
 # Stop Words Our Algorithm
 ###################################################################
 
-#silabas = #vowels - #2*vowels in a row
-# se a palavra tiver um acento em alguma vowel não subtrai
 
-# Count syllables
+
+# syllable_counter
+EXCEPTIONS = {
+    "cafe": 2,
+    "resume": 2,
+    "fiance": 2,
+    "cliche": 2,
+    # add more known exceptions here
+}
+
 def count_syllables(word: str) -> int:
-  """
-  Count the number of syllables in a given word based on vowel sequences.
+    """
+    Estimate English syllable count by:
+      0) overriding via EXCEPTIONS map if present
+      1) collapsing true diphthongs into a placeholder '1'
+      2) counting every vowel or placeholder as one syllable
+      3) dropping a silent final 'e' (but not in words ending 'le' or exceptions)
+    """
+    w = word.lower().strip()
 
-  This function counts the number of syllables by detecting sequences of vowels in the word. 
-  It considers the vowels 'aeiouáéíóúãõâêô' (including accented and special characters). 
-  The function works by iterating through each character in the word and counting the transitions 
-  between consonants and vowel sequences as a new syllable.
+    # 0) exception override
+    if w in EXCEPTIONS:
+        return EXCEPTIONS[w]
 
-  Parameters:
-  word (str): The word whose syllables are to be counted.
+    # 1) collapse true diphthongs into placeholder '1'
+    for d in ("ai", "au", "ae", "oi", "ou", "ow"):
+        w = w.replace(d, "1")
 
-  Returns:
-  int: The total number of syllables in the word.
-  """
+    # 2) count each remaining vowel or placeholder
+    accented = "áéíóúãõâêô"
+    vowels = set("aeiou") | set(accented)
+    count = sum(1 for ch in w if ch == "1" or ch in vowels)
 
-  vowels:str = "aeiou" # List of vowels
-  accent_vowels:str = "áéíóúãõâêô" # List of accent vowels
-  
-  word = word.lower()
-  syllables:int = 0
-  in_vowel_sequence:bool = False # Check if we are already in a sequence of vowels
-  
-  for char in word:
-      if char in vowels:
-          # If we are not already in a sequence of vowels, we start a new sequence
-          if not in_vowel_sequence:
-              syllables += 1
-              in_vowel_sequence = True
-      else:
-          # If we find a consonant, the sequence of vowels is finished
-          in_vowel_sequence = False
-  
-  return syllables
+    # 3) drop silent final 'e' (but not for 'le' endings or exceptions)
+    if w.endswith("e") and not w.endswith("le") and word.lower() not in EXCEPTIONS and count > 1:
+        count -= 1
+
+    return max(1, count)
+
 
 # Extract bigrams and count the frequency
 def extract_bigram_neighbors(texts: list[str]) -> dict[str, int]:
@@ -106,38 +111,49 @@ def compute_neigsyl(words: set[str], bigram_freqs: dict[str, int]) -> dict[str, 
   return neigsyl
 
 # Elbow method
-def find_elbow(neigsyl_dict: dict[str, float], delta_k=4) -> list[str]:
-  """
-  Use the elbow method to identify stopwords by analyzing the slope of the NeigSyl score curve.
+def find_elbow(neigsyl_dict: dict[str, float], delta_k=4, target_slope=-1.0, tolerance=0.1) -> list[str]:
+    """
+    Use the elbow method to identify stopwords by analyzing the slope of the NeigSyl score curve.
 
-  This function sorts words by their NeigSyl scores in descending order, then computes the slope 
-  between consecutive NeigSyl values. The stopwords are determined by identifying a "knee" 
-  in the curve, where the slope becomes approximately -1. This is interpreted as a change 
-  in the nature of the words from frequent and informative to less frequent and less informative.
+    Parameters:
+    neigsyl_dict (dict[str, float]): Words and their NeigSyl scores.
+    delta_k (int): Distance between points to calculate slope.
+    target_slope (float): The slope you're trying to detect (default -1.0).
+    tolerance (float): Acceptable deviation from the target slope (default 0.1).
 
-  Parameters:
-  neigsyl_dict (dict[str, float]): A dictionary where keys are words and values are their NeigSyl scores.
-  delta_k (int, optional): The number of positions to look ahead for slope calculation, default is 4.
+    Returns:
+    list[str]: List of identified stopwords.
+    """
+    sorted_items = sorted(neigsyl_dict.items(), key=lambda x: -x[1])
+    values = [val for _, val in sorted_items]
 
-  Returns:
-  list[str]: A list of words identified as stopwords based on the elbow method.
-  """
+    for r in range(len(values) - delta_k):
+        slope = (values[r + delta_k] - values[r]) / delta_k
+        if abs(slope - target_slope) < tolerance:
+            return [word for word, _ in sorted_items[:r + delta_k]]
 
-  # Sort NeigSyl values ​​in descending order
-  sorted_items:list[tuple[str, float]] = sorted(neigsyl_dict.items(), key=lambda x: -x[1])
-  values:list[float] = [val for _, val in sorted_items]
-  
-  # Iterate over the values ​​to calculate the slope
-  for r in range(len(values) - delta_k):
-      # Calculate slope: (NeigSyl(r + delta_k) - NeigSyl(r)) / delta_k
-      slope:float = (values[r + delta_k] - values[r]) / delta_k
-      # Check if the slope is approximately -1 (tolerance to avoid numerical problems)
-      if abs(slope + 1) < 0.1:  # Tolerance of 0.1 for proximity to -1
-          stopwords:list[str] = [word for word, _ in sorted_items[:r + delta_k]]
-          return stopwords
+    return [word for word, _ in sorted_items]
 
-  # Return all words if dot is not found
-  return [word for word, _ in sorted_items]
+
+# Plot the neigsyl_curve
+def plot_neigsyl_curve(neigsyl_dict: dict[str, float],plot_name:str):
+    sorted_scores = sorted(neigsyl_dict.values(), reverse=True)
+    plt.figure(figsize=(10, 5))
+    plt.plot(sorted_scores, marker='o')
+    plt.title("NeigSyl Score Curve")
+    plt.xlabel("Words (sorted by NeigSyl)")
+    plt.ylabel("NeigSyl Score")
+    plt.grid(True)
+
+    # Salva o gráfico
+    # Caminho correto da pasta de plots
+    PLOT_DIR = os.path.join("tests", "stop_words_plots")
+    os.makedirs(PLOT_DIR, exist_ok=True)
+    # Salva na pasta correta
+    plot_path = os.path.join(PLOT_DIR, f"{plot_name}_neigsyl_plot.png")
+    plt.savefig(plot_path)
+    plt.close()
+
 
 # Stop Words
 def get_stop_words(corpus:dict) -> list[str]:
@@ -167,7 +183,7 @@ def get_stop_words(corpus:dict) -> list[str]:
   # Compute NeigSyl scores for all words
   neigsyl_scores: dict[str, float] = compute_neigsyl(all_words, bigram_freqs)
   # Identify stopwords using the elbow method
-  stop_words: list[str] = find_elbow(neigsyl_scores, delta_k=4)
+  stop_words: list[str] = find_elbow(neigsyl_scores, delta_k=5,target_slope=-0.8,tolerance=0.05)
 
   return stop_words
 

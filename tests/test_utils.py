@@ -31,7 +31,7 @@ def test_calculate_and_store_glue():
     all_n_grams = {
         "a b c": n_gram(size=3, frequency=1, tokens=tokens1),
         "a b": n_gram(size=2, frequency=2, tokens=tokens2),
-        "b c": n_gram(size=2, frequency=2, tokens=tokens3),
+        "b c": n_gram(size=2, frequency=3, tokens=tokens3),
     }
 
     stop_words = ["a"]
@@ -49,6 +49,12 @@ def test_calculate_and_store_glue():
 
     print("calculate_and_store_glue: OK")
 
+    ####### Test the LocalMax Algorithm #######
+    ng = all_n_grams.values()
+    for n in ng:
+        n.localMax()
+        print(n.is_relevant_expression())
+        
 
 if __name__ == "__main__":
     test_get_element()
