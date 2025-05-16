@@ -1,7 +1,8 @@
 from src.text_processing import text_processing,read_text_files, add_spaces, tokenize_text
 from src.ngram import *
 from src.stopwords import get_stop_words, get_nltk_stopwords_in_corpus
-from src.utils import calculate_and_store_glue,extract_random_relevant_expressions
+from src.utils import calculate_and_store_glue,extract_random_relevant_expressions, ask_is_RE
+from src.evaluation_metrics import precision
 
 def extractor() -> dict[str:n_gram]:
     # Preprocessing
@@ -32,7 +33,26 @@ def extractor() -> dict[str:n_gram]:
 
 
 def evaluation(total_list:dict[str:n_gram],relevant_expressions:list[str]):
-     return
+
+    # Compute the precision of the algorithm
+    print("The list of relevant expressions is:", relevant_expressions)
+    real_RE = []
+
+    for expr in relevant_expressions:
+        is_re = ask_is_RE(expr)
+        real_RE.append(is_re)
+
+    for i in range(len(relevant_expressions)):
+        if real_RE[i]:
+            true_positive += 1
+        else:
+            false_positive += 1
+
+    precision = precision(true_positive, false_positive)
+    print("The precision of our LocalMaxs algorithm is:", precision)
+
+
+    return precision
 
 
 def main():    

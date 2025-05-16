@@ -1,5 +1,7 @@
 import random
 from src.ngram import n_gram  # Classe n_gram
+import tkinter as tk
+from tkinter import messagebox
 
 #############################################################
 # These functions are used to compute metrics on the tokens to use in the LocalMaxs extractor.
@@ -110,4 +112,15 @@ def extract_random_relevant_expressions(all_n_grams: dict[str, 'n_gram'], size: 
     
     # Returns a random sample of until size 200
     return random.sample(relevant_expressions, min(size, len(relevant_expressions)))
+
+##############################################################################
+# Function to ask the user if the relevant expression is correct or not
+##############################################################################
+def ask_is_RE(expression):
+    root = tk.Tk()
+    root.withdraw()  # Cache la fenêtre principale
+
+    result = messagebox.askyesno("Evaluation", f"Is this expression a RE?\n\n{expression}")
+    root.destroy()
+    return result
 
