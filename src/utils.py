@@ -120,7 +120,7 @@ def ask_is_RE(expression):
     root = tk.Tk()
     root.withdraw()  # Cache la fenêtre principale
 
-    result = messagebox.askyesno("Evaluation", f"Is this expression a RE?\n\n{expression}")
+    result = messagebox.askyesno("Evaluation", f"Is this expression a RE? Answer True or False.\n\n{expression}")
     root.destroy()
     return result
 
