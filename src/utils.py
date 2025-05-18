@@ -106,21 +106,44 @@ def calculate_and_store_glue(all_n_grams: dict[str, n_gram], glue_function: str,
 #############################################################################
 # Extract all the relevant expressions from the all_n_grams dictionary
 #############################################################################
-def extract_random_relevant_expressions(all_n_grams: dict[str, 'n_gram'], size: int = 200) -> list[str]:
-    # Extract all relevant expressions
-    relevant_expressions = [key for key, ng in all_n_grams.items() if ng.is_relevant_expression()]
+def extract_random_relevant_expressions(all_n_grams: dict[str, n_gram], size: int = 200) -> list[str]:
+    """
+    Extracts a random sample of relevant expressions from a dictionary of n-grams.
+    The function filters n-grams marked as relevant expressions and returns a random
+    sample of up to the specified size.
     
-    # Returns a random sample of until size 200
+    Args:
+        all_n_grams: A dictionary mapping strings to n_gram objects.
+        size: The maximum number of expressions to return (default is 200).
+    
+    Returns:
+        A list of randomly selected relevant expression strings.
+    """
+    # Extract all relevant expressions
+    relevant_expressions: list[str] = [key for key, ng in all_n_grams.items() if ng.is_relevant_expression()]
+    
+    # Returns a random sample of up to size 200
     return random.sample(relevant_expressions, min(size, len(relevant_expressions)))
 
 ##############################################################################
 # Function to ask the user if the relevant expression is correct or not
 ##############################################################################
-def ask_is_RE(expression):
-    root = tk.Tk()
-    root.withdraw()  # Cache la fenêtre principale
+def ask_is_RE(expression: str) -> bool:
+    """
+    Prompts the user to evaluate whether a given expression is relevant.
+    Displays a dialog box asking the user to confirm if the expression is a relevant
+    expression (RE) and returns their response as a boolean.
+    
+    Args:
+        expression: The expression to be evaluated.
+    
+    Returns:
+        True if the user confirms the expression is relevant, False otherwise.
+    """
+    root: tk.Tk = tk.Tk()
+    root.withdraw()  # Hide the main window
 
-    result = messagebox.askyesno("Evaluation", f"Is this expression a RE? Answer True or False.\n\n{expression}")
+    result: bool = messagebox.askyesno("Evaluation", f"Is this expression a RE? Answer True or False.\n\n{expression}")
     root.destroy()
     return result
 

@@ -2,7 +2,7 @@ from src.text_processing import text_processing,read_text_files, add_spaces, tok
 from src.ngram import *
 from src.stopwords import get_stop_words, get_nltk_stopwords_in_corpus
 from src.utils import calculate_and_store_glue,extract_random_relevant_expressions, ask_is_RE
-from src.evaluation_metrics import precision
+from src.evaluation_metrics import precision,recall,f1_score
 
 def extractor() -> dict[str:n_gram]:
     # Preprocessing
@@ -32,14 +32,22 @@ def extractor() -> dict[str:n_gram]:
     return ngram_dict3
 
 
-def evaluation(total_list:dict[str:n_gram],relevant_expressions:list[str]):
+def evaluation(relevant_expressions:list[str]) -> None:
+    """
+    Evaluates the performance of the LocalMaxs algorithm by calculating precision, recall and f1.
+    Parameters:
+        total_list (dict[str, n_gram]): Dictionary of n-grams.
+        relevant_expressions (list[str]): List of expressions identified as relevant.
+    Returns:
+        None
+    """
 
     # Compute the precision of the algorithm
     print("The list of relevant expressions is:", relevant_expressions)
-    real_RE = []
+    real_RE:list[bool] = []
 
     for expr in relevant_expressions:
-        is_re = ask_is_RE(expr)
+        is_re:bool = ask_is_RE(expr)
         real_RE.append(is_re)
 
     for i in range(len(relevant_expressions)):
@@ -48,17 +56,25 @@ def evaluation(total_list:dict[str:n_gram],relevant_expressions:list[str]):
         else:
             false_positive += 1
 
-    precision = precision(true_positive, false_positive)
-    print("The precision of our LocalMaxs algorithm is:", precision)
+    precision_value:float = precision(float(true_positive), float(false_positive))
+    print("The precision of our LocalMaxs algorithm is:", precision_value )
+
+    #compute the recall
+    # False negatives: real relevant expressions that were not identified
+    false_negative:int = len(real_RE - relevant_expressions)
+    recall_value:float = recall(float(true_positive), float(false_negative))
+    print("The recall of our LocalMaxs algorithm is:", recall_value )
+
+    #compute the f1
+    f1_value:float = f1_score(precision_value,recall_value)
+    print("The f1_score of our LocalMaxs algorithm is:", f1_value )
 
 
-    return precision
 
-
-def main():    
+def main() -> None:    
     total_list:dict[str:n_gram] = extractor()
     relevant_expressions:list[str] = extract_random_relevant_expressions(total_list)
-    evaluation(total_list,relevant_expressions)
+    evaluation(relevant_expressions)
 
 
 if __name__ == "__main__":
