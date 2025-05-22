@@ -4,16 +4,16 @@ from src.stopwords import get_stop_words, get_nltk_stopwords_in_corpus
 from src.utils import calculate_and_store_glue,extract_random_relevant_expressions, ask_is_RE
 from src.evaluation_metrics import precision,recall,f1_score
 
-def extractor() -> dict[str:n_gram]:
+def extractor(path:str) -> dict[str:n_gram]:
     # Preprocessing
-    tokens:list[str] = text_processing("../test")
+    tokens:list[str] = text_processing(path)
     #print(tokens)
 
     # Stopwords
     #######################################################################################
     # Still using the python library due to the need of imporvement in our algorithm
     #######################################################################################
-    stop_words:list[str] = get_nltk_stopwords_in_corpus(read_text_files("../test"))
+    stop_words:list[str] = get_nltk_stopwords_in_corpus(read_text_files(path))
     #print(stop_words)
 
     # Building n-grams
@@ -76,7 +76,7 @@ def evaluation(relevant_expressions:list[str]) -> None:
 
 
 def main() -> None:    
-    total_list = extractor() #total_list:dict[str:n_gram] = extractor()
+    total_list:dict[str:n_gram] = extractor("../test")
     relevant_expressions:list[str] = extract_random_relevant_expressions(total_list)
     evaluation(relevant_expressions)
 
