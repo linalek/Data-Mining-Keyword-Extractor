@@ -76,7 +76,7 @@ def evaluation(relevant_expressions:list[str]) -> None:
 
 
 def main() -> None:    
-    total_list:dict[str:n_gram] = extractor("../test")
+    total_list:dict[str:n_gram] = extractor("../corpus2mw")
     relevant_expressions:list[str] = extract_random_relevant_expressions(total_list)
     evaluation(relevant_expressions)
 

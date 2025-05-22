@@ -98,11 +98,6 @@ def calculate_and_store_glue(all_n_grams: dict[str, n_gram], glue_function: str,
 
     return all_n_grams
 
-###################################### ASK ASK ASK THE PROFESSOR #####################################
-# we need to create 8-grams or just 7-grams? if its 7-grams we need to change the values in create_n_grams funciton and calculate_and_store_glue
-############################# ############################### ########################## ##############
-
-
 #############################################################################
 # Extract all the relevant expressions from the all_n_grams dictionary
 #############################################################################
