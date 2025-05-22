@@ -49,13 +49,13 @@ def calculate_and_store_glue(all_n_grams: dict[str, n_gram], glue_function: str,
 
             # Check if sub-n_grams start or end with stop words
             if to_update1[0] in stop_words or to_update1[-1] in stop_words:
-                print(f"Skipping sub-n_gram '{' '.join(to_update1)}' due to stop word restriction.")
+                #print(f"Skipping sub-n_gram '{' '.join(to_update1)}' due to stop word restriction.")
                 ngram1 = None
             else:
                 ngram1 = get_element(to_update1, all_n_grams)
 
             if to_update2[0] in stop_words or to_update2[-1] in stop_words:
-                print(f"Skipping sub-n_gram '{' '.join(to_update2)}' due to stop word restriction.")
+                #print(f"Skipping sub-n_gram '{' '.join(to_update2)}' due to stop word restriction.")
                 ngram2 = None
             else:
                 ngram2 = get_element(to_update2, all_n_grams)

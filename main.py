@@ -7,7 +7,7 @@ from src.evaluation_metrics import precision,recall,f1_score
 def extractor() -> dict[str:n_gram]:
     # Preprocessing
     tokens:list[str] = text_processing("../test")
-    print(tokens)
+    #print(tokens)
 
     # Stopwords
     #######################################################################################
@@ -18,18 +18,18 @@ def extractor() -> dict[str:n_gram]:
 
     # Building n-grams
     ngram_dict:dict[str:n_gram] = create_n_grams(tokens,stop_words)
-    print(ngram_dict)
+    #print(ngram_dict)
 
     # Glue values updated in each n-gram
-    ngram_dict2:dict[str:n_gram] = calculate_and_store_glue(ngram_dict, "dice", stop_words)
-    print(ngram_dict2)
+    ngram_dict:dict[str:n_gram] = calculate_and_store_glue(ngram_dict, "dice", stop_words)
+    #print(ngram_dict)
 
     # Calculate Relevant Expressions
-    ngram_dict3:dict[str:n_gram] = ngram_dict2.values()
-    for n_gram in ngram_dict3:
+    #ngram_dict3:dict[str:n_gram] = ngram_dict2.values()
+    for n_gram in ngram_dict.values():
         n_gram.localMax()
     
-    return ngram_dict3
+    return ngram_dict
 
 
 def evaluation(relevant_expressions:list[str]) -> None:
@@ -46,6 +46,10 @@ def evaluation(relevant_expressions:list[str]) -> None:
     print("The list of relevant expressions is:", relevant_expressions)
     real_RE:list[bool] = []
 
+    # True positives: relevant expressions that were identified and False positives: relevant expressions that were not identified by the user
+    true_positive:int = 0
+    false_positive:int = 0
+
     for expr in relevant_expressions:
         is_re:bool = ask_is_RE(expr)
         real_RE.append(is_re)
@@ -59,20 +63,20 @@ def evaluation(relevant_expressions:list[str]) -> None:
     precision_value:float = precision(float(true_positive), float(false_positive))
     print("The precision of our LocalMaxs algorithm is:", precision_value )
 
-    #compute the recall
+    # Compute the recall
     # False negatives: real relevant expressions that were not identified
-    false_negative:int = len(real_RE - relevant_expressions)
+    false_negative:int = len(real_RE) - len(relevant_expressions)
     recall_value:float = recall(float(true_positive), float(false_negative))
     print("The recall of our LocalMaxs algorithm is:", recall_value )
 
-    #compute the f1
+    # Compute the f1
     f1_value:float = f1_score(precision_value,recall_value)
     print("The f1_score of our LocalMaxs algorithm is:", f1_value )
 
 
 
 def main() -> None:    
-    total_list:dict[str:n_gram] = extractor()
+    total_list = extractor() #total_list:dict[str:n_gram] = extractor()
     relevant_expressions:list[str] = extract_random_relevant_expressions(total_list)
     evaluation(relevant_expressions)
 
