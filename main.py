@@ -25,7 +25,6 @@ def extractor(path:str) -> dict[str:n_gram]:
     #print(ngram_dict)
 
     # Calculate Relevant Expressions
-    #ngram_dict3:dict[str:n_gram] = ngram_dict2.values()
     for n_gram in ngram_dict.values():
         n_gram.localMax()
     

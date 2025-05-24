@@ -37,3 +37,20 @@ To run the tests, ensure you are in the root folder `PAD_Project2`. For example,
 python -m tests.test_stopwords
 ```
 To run any other test, replace `test_stopwords` with the name of the desired test file in the `tests` folder, using the format `python -m tests.<test_name>`.
+
+## Running the Main Extraction Algorithm
+
+To run the main extraction pipeline on a specific corpus, follow these steps:
+
+1. **Prepare your corpus**  
+   Ensure that your corpus is a folder containing plain text files. Each file should represent one document. The algorithm will process all files within the folder.
+
+2. **Set the corpus path**  
+   Open the `main.py` file and locate the `extractor()` function call inside the `main()` function. Replace the argument of the `extractor()` with the path to your corpus folder. For example:
+   ```python
+   extractor("path/to/your/corpus")
+   ``` 
+
+3. **Run the main script**
+   Once the corpus path is correctly set, execute the main script from the root of the project using:
+   ```python main.py```
