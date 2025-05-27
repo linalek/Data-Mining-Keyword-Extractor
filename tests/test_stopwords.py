@@ -38,7 +38,7 @@ def test_count_syllables():
     result6 = count_syllables("mathematics")
     assert result6 == 4, f"Test 6 failed: mathematics -> {result6} (expected 4)"
 
-    print("✅ count_syllables tests passed.")
+    print("count_syllables tests passed.")
 
 from src.text_processing import read_text_files
 from src.stopwords import (
