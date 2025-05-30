@@ -3,8 +3,22 @@ from src.ngram import *
 from src.stopwords import get_stop_words, get_nltk_stopwords_in_corpus
 from src.utils import calculate_and_store_glue,extract_random_relevant_expressions, ask_is_RE
 from src.evaluation_metrics import precision,recall,f1_score
+from src.keywords import get_explicit_keywords, calculate_implicit_keywords
 
 def extractor(path:str) -> dict[str:n_gram]:
+    """ 
+    Extracts n-grams and identifies relevant expressions from a text corpus.
+    This function performs the following steps:
+        1. Preprocesses the text at the given path and tokenizes it.
+        2. Determines the list of stop words present in the corpus.
+        3. Builds a dictionary of n-grams from the tokenized text, excluding stop words.
+        4. Calculates and stores "glue" values for each n-gram using the Dice coefficient.
+        5. Applies the localMax algorithm to each n-gram to identify relevant expressions.
+    Args:
+        path (str): Path to the text corpus or file.
+    Returns:
+        dict[str, n_gram]: A dictionary mapping each n-gram string to its corresponding n_gram object, with relevance and statistical metrics computed.
+    """
     # Preprocessing
     tokens:list[str] = text_processing(path)
     #print(tokens)
@@ -75,10 +89,26 @@ def evaluation(relevant_expressions:list[str]) -> None:
 
 
 def main() -> None:    
-    total_list:dict[str:n_gram] = extractor("../corpus2mw")
+
+    corpus_path:str = "./tests/corpus_test" 
+
+    ## Part1: extracting Relevant Expressions
+
+    total_list:dict[str:n_gram] = extractor(corpus_path)
     relevant_expressions:list[str] = extract_random_relevant_expressions(total_list)
     evaluation(relevant_expressions)
 
+
+    ## Part2: extracting Keywords
+
+    # Calculate stop words
+    stop_words:list[str] = get_nltk_stopwords_in_corpus(read_text_files(corpus_path))
+    # Compute explicit keywords
+    explicit_keywords: dict[str, list[str]] = get_explicit_keywords(corpus_path, relevant_expressions, 10, stop_words)
+    print("The explicit keywords of this corpus are:", explicit_keywords)
+    #Compute implicit keywords
+    implicit_keywords: dict[str, list[str]] = calculate_implicit_keywords(corpus_path, explicit_keywords, relevant_expressions, 10, stop_words)
+    print("The implicit keywords of this corpus are:", implicit_keywords)
 
 if __name__ == "__main__":
     main()

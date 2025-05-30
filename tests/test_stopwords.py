@@ -61,7 +61,7 @@ PARAMS = [
 
 # Define test corpora
 TEST_CORPORA = [
-    ("Test1", read_text_files("./data/corpus2mw")),
+    ("Test1", read_text_files("./corpus_test")),
     ("Test2", {"text": (
         "Although the weather was cold and the wind was strong, the children decided to go outside "
         "and play in the snow until they became tired and returned home."

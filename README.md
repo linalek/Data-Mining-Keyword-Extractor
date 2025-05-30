@@ -4,6 +4,11 @@
 
 This project implements an algorithm designed to process and analyze text data by removing stopwords and performing linguistic analysis. The algorithm is built to be efficient and modular, allowing for easy integration into larger text processing pipelines. It leverages Python for its simplicity and robust library ecosystem.
 
+## Authors
+- Diogo Almeida 70140: dmh.almeida@campus.fct.unl.pt 
+- Duarte Rodrigues 70150: dms.rodrigues@campus.fct.unl.pt
+- Lina Lekbouri 72697: l.lekbouri@campus.fct.unl.pt
+
 ## Setting Up the Environment
 
 To get started with this project, follow these steps to set up your environment:
@@ -37,6 +42,11 @@ To run the tests, ensure you are in the root folder `PAD_Project2`. For example,
 python -m tests.test_stopwords
 ```
 To run any other test, replace `test_stopwords` with the name of the desired test file in the `tests` folder, using the format `python -m tests.<test_name>`.
+
+**NOTE:** to run the test for stopwords, the path of a corpus test for test1 must be change in the code: 
+```python
+("Test1", read_text_files("../test"))
+```
 
 ## Running the Main Extraction Algorithm
 

@@ -1,4 +1,4 @@
-from text_processing import read_text_files,tokenize_text
+from src.text_processing import read_text_files,tokenize_text
 import math
 
 def get_explicit_keywords(corpus_path: str,relevant_expressions: list[str],total_keywords: int,stop_words: list[str]) -> dict[str, list[str]]:
