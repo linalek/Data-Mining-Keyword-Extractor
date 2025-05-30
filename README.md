@@ -45,7 +45,7 @@ To run any other test, replace `test_stopwords` with the name of the desired tes
 
 **NOTE:** to run the test for stopwords, the path of a corpus test for test1 must be change in the code: 
 ```python
-("Test1", read_text_files("../test"))
+("Test1", read_text_files("path/to/your/corpus"))
 ```
 
 ## Running the Main Extraction Algorithm
