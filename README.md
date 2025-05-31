@@ -56,9 +56,9 @@ To run the main extraction pipeline on a specific corpus, follow these steps:
    Ensure that your corpus is a folder containing plain text files. Each file should represent one document. The algorithm will process all files within the folder.
 
 2. **Set the corpus path**  
-   Open the `main.py` file and locate the `extractor()` function call inside the `main()` function. Replace the argument of the `extractor()` with the path to your corpus folder. For example:
+   Open the `main.py` file and locate the `corpus_path:str` variable inside the `main()` function. Replace the variable with the path to your corpus folder. For example:
    ```python
-   extractor("path/to/your/corpus")
+   corpus_path:str = "path/to/your/corpus" 
    ``` 
 
 3. **Run the main script**
