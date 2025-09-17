@@ -1,6 +1,18 @@
 # Data Mining Keyword Extractor
 ### Data Mining course, universidade Nova de Lisboa
 
+## Table of Contents
+
+- [About the Project](#about-the-project)
+- [Authors](#authors)
+- [Setting up the Environment](#setting-up-the-environment)
+   - [Prerequisites](#prerequisites)
+   - [Local Environment](#local-environment)
+- [Tests](#tests)
+- [Usage](#running-the-main-extraction-algorithm)
+
+---
+
 ## About the Project
 
 This project implements an algorithm designed to process and analyze text data by removing stopwords and performing linguistic analysis. The algorithm is built to be efficient and modular, allowing for easy integration into larger text processing pipelines. It leverages Python for its simplicity and robust library ecosystem.
@@ -12,6 +24,25 @@ This project implements an algorithm designed to process and analyze text data b
 
 ## Setting Up the Environment
 
+### Prerequisites
+Before you get started, make sure you have the following software installed on your machine:
+- **Git**
+- **Python** (3.8 version or higher)
+
+**Cloning the Repository**
+1.  Open your terminal or command prompt.
+2.  Clone the repository using its URL:
+
+    ```sh
+    git clone [https://github.com/linalek/Data-Mining-Keyword-Extractor.git](https://github.com/linalek/Data-Mining-Keyword-Extractor.git)
+    ```
+
+3.  Navigate into the project folder:
+
+    ```sh
+    cd Data-Mining-Keywork-Extractor
+    ```
+### Local Environment
 To get started with this project, follow these steps to set up your environment:
 
 1. **Create a Virtual Environment**  
