@@ -1,4 +1,5 @@
-# PAD_Project2
+# Data Mining Keyword Extractor
+### Data Mining course, universidade Nova de Lisboa
 
 ## About the Project
 
