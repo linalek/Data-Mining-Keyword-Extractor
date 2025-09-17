@@ -34,7 +34,7 @@ Before you get started, make sure you have the following software installed on y
 2.  Clone the repository using its URL:
 
     ```sh
-    git clone [https://github.com/linalek/Data-Mining-Keyword-Extractor.git](https://github.com/linalek/Data-Mining-Keyword-Extractor.git)
+    git clone https://github.com/linalek/Data-Mining-Keyword-Extractor.git
     ```
 
 3.  Navigate into the project folder:
